@@ -9,13 +9,17 @@ class MysqlClient {
     console.log(`MySQL pools created with options ${JSON.stringify(options)}`)
   }
 
-  doQuery(query) {
+  query(sql, values = [], options = {}) {
     return new Promise((resolve, reject) => {
       this.pool.getConnection((err, conn) => {
         if (err) {
           return reject(err);
         }
-        conn.query(query, (err, results, fields) => {
+        conn.query({
+          ...options,  // avoid options override sql and values
+          sql,
+          values,
+        }, (err, results, fields) => {
           conn.release();
           if (err) {
             return reject(err);

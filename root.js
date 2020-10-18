@@ -11,21 +11,29 @@ class VideoFilter {
   
   // check validation of filter params
   validate() {
+    // TODO raise error, return code 400 when invalid params detected
   }
   
   // to where string
   compile() {
-    const conditions = [];
+    const templates = [];
+    const values = [];
     if (this.title_alias) {
-      conditions.push(`title_alias like "%${this.title_alias}%"`);
+      templates.push('`title_alias` LIKE ?');
+      values.push(`%${this.title_alias}%`);
     }
     if (this.pubdate_min) {
-      conditions.push(`pubdate >= ${this.pubdate_min}`);
+      templates.push('`pubdate` >= ?');
+      values.push(this.pubdate_min);
     }
     if (this.pubdate_max) {
-      conditions.push(`pubdate <= ${this.pubdate_max}`);
+      templates.push('`pubdate` <= ?');
+      values.push(this.pubdate_max);
     }
-    return conditions.reduce((prev, curr) => prev += ` && ${curr}`, '');
+    return [
+      templates.reduce((prev, curr) => prev += ` && ${curr}`, ''),
+      values,
+    ];
   }
 }
 
@@ -41,19 +49,14 @@ class Video {
 
 const root = {
   video: async function ({ bvid }) {
-    // TODO SQL injection
-    const result = await db.doQuery(`
-      SELECT * FROM ms_video WHERE bvid = '${bvid}';
-    `);
+    const result = await db.query('SELECT * FROM `ms_video` WHERE `bvid` = ?', [bvid]);
     return result ? new Video(result[0]) : null;
   },
   videos: async function ({ filter = {} }) {
     filter = new VideoFilter(filter);
     filter.validate();
-    // TODO SQL injection
-    const results = await db.doQuery(`
-      SELECT * FROM ms_video WHERE 1=1 ${filter.compile()}
-    `);
+    const [template, values] = filter.compile();
+    const results = await db.query('SELECT * FROM `ms_video` WHERE 1=1' + template, [...values]);
     return results ? results.map(x => new Video(x)) : [];
   },
 }
