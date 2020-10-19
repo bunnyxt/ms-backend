@@ -1,7 +1,5 @@
 const db = require('./db');
 
-// TODO add base class of Filter
-
 class VideoFilter {
   constructor({ title_alias, pubdate_min, pubdate_max }) {
     this.title_alias = title_alias;
@@ -12,6 +10,9 @@ class VideoFilter {
   // check validation of filter params
   validate() {
     // TODO raise error, return code 400 when invalid params detected
+    if (this.pubdate_max && this.pubdate_min && this.pubdate_max < this.pubdate_min) {
+      // TODO
+    }
   }
   
   // to where string
@@ -31,14 +32,16 @@ class VideoFilter {
       values.push(this.pubdate_max);
     }
     return [
-      templates.reduce((prev, curr) => prev += ` && ${curr}`, ''),
+      templates.reduce((prev, curr) => `${prev} && ${curr}`, ''),
       values,
     ];
   }
 }
 
 class Video {
-  constructor({ id, bvid, title_alias, pubdate, mid }) {
+  constructor({
+    id, bvid, title_alias, pubdate, mid,
+  }) {
     this.id = id;
     this.bvid = bvid;
     this.title_alias = title_alias;
@@ -48,17 +51,17 @@ class Video {
 }
 
 const root = {
-  video: async function ({ bvid }) {
+  async video({ bvid }) {
     const result = await db.query('SELECT * FROM `ms_video` WHERE `bvid` = ?', [bvid]);
     return result ? new Video(result[0]) : null;
   },
-  videos: async function ({ filter = {} }) {
-    filter = new VideoFilter(filter);
-    filter.validate();
-    const [template, values] = filter.compile();
-    const results = await db.query('SELECT * FROM `ms_video` WHERE 1=1' + template, [...values]);
-    return results ? results.map(x => new Video(x)) : [];
+  async videos({ filter = {} }) {
+    const videoFilter = new VideoFilter(filter);
+    videoFilter.validate();
+    const [template, values] = videoFilter.compile();
+    const results = await db.query(`SELECT * FROM \`ms_video\` WHERE 1=1 ${template}`, [...values]);
+    return results ? results.map((video) => new Video(video)) : [];
   },
-}
+};
 
 module.exports = root;

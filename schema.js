@@ -16,7 +16,6 @@ const schema = buildSchema(`
   type Query {
     video(bvid: String!): Video
     videos(filter: VideoFilter): [Video!]!
-  } `
-);
+  } `);
 
 module.exports = schema;

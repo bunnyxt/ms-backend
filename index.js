@@ -12,7 +12,7 @@ const root = require('./root');
 // start server
 const app = express();
 app.use('/graphql', graphqlHTTP({
-  schema: schema,
+  schema,
   rootValue: root,
   graphiql: true,
 }));
