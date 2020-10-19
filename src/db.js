@@ -75,8 +75,7 @@ class MysqlClient {
                 : enableCamelCaseFieldMapper
                   ? kebabCaseToCamelCase(name) // kebab case to camel case
                   : name,
-            }),
-            {},
+            }), {},
           );
           
           // use field mapper to transform result list

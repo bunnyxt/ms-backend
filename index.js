@@ -6,8 +6,8 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 
 // root ans schema
-const schema = require('./schema');
-const root = require('./root');
+const schema = require('./src/schema');
+const root = require('./src/root');
 
 // start server
 const app = express();
