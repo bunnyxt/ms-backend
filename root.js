@@ -1,16 +1,16 @@
 const db = require('./db');
 
 class VideoFilter {
-  constructor({ title_alias, pubdate_min, pubdate_max }) {
-    this.title_alias = title_alias;
-    this.pubdate_min = pubdate_min;
-    this.pubdate_max = pubdate_max;
+  constructor({ titleAlias, pubdateMin, pubdateMax }) {
+    this.titleAlias = titleAlias;
+    this.pubdateMin = pubdateMin;
+    this.pubdateMax = pubdateMax;
   }
   
   // check validation of filter params
   validate() {
     // TODO raise error, return code 400 when invalid params detected
-    if (this.pubdate_max && this.pubdate_min && this.pubdate_max < this.pubdate_min) {
+    if (this.pubdateMax && this.pubdateMin && this.pubdateMax < this.pubdateMin) {
       // TODO
     }
   }
@@ -19,17 +19,17 @@ class VideoFilter {
   compile() {
     const templates = [];
     const values = [];
-    if (this.title_alias) {
+    if (this.titleAlias) {
       templates.push('`title_alias` LIKE ?');
-      values.push(`%${this.title_alias}%`);
+      values.push(`%${this.titleAlias}%`);
     }
-    if (this.pubdate_min) {
+    if (this.pubdateMin) {
       templates.push('`pubdate` >= ?');
-      values.push(this.pubdate_min);
+      values.push(this.pubdateMin);
     }
-    if (this.pubdate_max) {
+    if (this.pubdateMax) {
       templates.push('`pubdate` <= ?');
-      values.push(this.pubdate_max);
+      values.push(this.pubdateMax);
     }
     return [
       templates.reduce((prev, curr) => `${prev} && ${curr}`, ''),
@@ -40,11 +40,11 @@ class VideoFilter {
 
 class Video {
   constructor({
-    id, bvid, title_alias, pubdate, mid,
+    id, bvid, titleAlias, pubdate, mid,
   }) {
     this.id = id;
     this.bvid = bvid;
-    this.title_alias = title_alias;
+    this.titleAlias = titleAlias;
     this.pubdate = pubdate;
     this.mid = mid;
   }
