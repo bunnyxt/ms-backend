@@ -2,10 +2,12 @@
   "name": "ms-backend",
   "version": "1.0.0",
   "description": "GraphQL api for VOCALOID CHINA milestone project.",
+  "repository": "https://github.com/bunnyxt/ms-backend",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "bunnyxt",
@@ -18,6 +20,12 @@
     "mysql": "^2.18.1"
   },
   "devDependencies": {
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "nodemon": "^2.0.5"
   }
 }
