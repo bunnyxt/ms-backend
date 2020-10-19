@@ -67,14 +67,14 @@ class MysqlClient {
           
           // build field mapper, consider custom field names and to camel case
           const fieldMapper = fields.reduce(
-            (prev, curr) => ({
+            (prev, { name }) => ({
               ...prev,
               // eslint-disable-next-line no-nested-ternary
-              [curr.name]: customFieldMapper[curr.name]
-                ? customFieldMapper[curr.name] // use custom field name
+              [name]: customFieldMapper[name]
+                ? customFieldMapper[name] // use custom field name
                 : enableCamelCaseFieldMapper
-                  ? kebabCaseToCamelCase(curr.name) // kebab case to camel case
-                  : curr.name,
+                  ? kebabCaseToCamelCase(name) // kebab case to camel case
+                  : name,
             }),
             {},
           );
