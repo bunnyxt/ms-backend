@@ -38,6 +38,14 @@ class VideoFilter {
   }
 }
 
+class Member {
+  constructor({ id, mid, name }) {
+    this.id = id;
+    this.mid = mid;
+    this.name = name;
+  }
+}
+
 class Video {
   constructor({
     id, bvid, titleAlias, pubdate, mid,
@@ -47,6 +55,11 @@ class Video {
     this.titleAlias = titleAlias;
     this.pubdate = pubdate;
     this.mid = mid;
+  }
+  
+  async owner() {
+    const result = await db.query('SELECT * FROM `ms_member` WHERE `mid` = ?', [this.mid]);
+    return result ? new Member(result[0]) : null;
   }
 }
 
@@ -61,6 +74,14 @@ const root = {
     const [template, values] = videoFilter.compile();
     const results = await db.query(`SELECT * FROM \`ms_video\` WHERE 1=1 ${template}`, [...values]);
     return results ? results.map((video) => new Video(video)) : [];
+  },
+  async member({ mid }) {
+    const result = await db.query('SELECT * FROM `ms_member` WHERE `mid` = ?', [mid]);
+    return result ? new Member(result[0]) : null;
+  },
+  async members() {
+    const results = await db.query('SELECT * FROM `ms_member`');
+    return results ? results.map((member) => new Member(member)) : [];
   },
 };
 
