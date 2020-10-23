@@ -1,4 +1,5 @@
 const memberService = require('../services/memberService');
+const recordService = require('../services/recordService');
 
 class Video {
   constructor({
@@ -13,6 +14,10 @@ class Video {
   
   owner() {
     return memberService.getMemberByMid(this.mid);
+  }
+  
+  records() {
+    return recordService.getRecordsByBvid(this.bvid);
   }
 }
 

@@ -8,6 +8,7 @@ type Video {
   pubdate: Int!
   mid: Int!
   owner: Member!
+  records: [Record!]!
 }
 input VideoFilter {
   titleAlias: String
@@ -18,6 +19,18 @@ type Member {
   id: Int!
   mid: Int!
   name: String!
+}
+type Record {
+  id: Int!
+  bvid: String!
+  threshold: Int!
+  preciseValue: Int!
+  time: Int!
+  timespan: Int!
+  srcType: String
+  srcAuthor: String
+  srcUrl: String
+  remark: String
 }
 type Query {
   video(bvid: String!): Video
