@@ -24,11 +24,7 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 // start server
-const PORT = Number(process.env.PORT);
-if (!(PORT >= 1024 && PORT <= 65535)) {
-  console.error(`Invalid port ${PORT} detected!`);
-  process.exit(1);
-}
+const PORT = process.env.PORT || 5222;
 app.listen(PORT, () => {
   console.log(`GraphQL API server running at localhost:${PORT}/graphql`);
 });
