@@ -7,8 +7,8 @@ const cors = require('cors');
 const { graphqlHTTP } = require('express-graphql');
 
 // root ans schema
-const schema = require('./src/schema');
-const root = require('./src/root');
+const schema = require('./src/schemas/schema');
+const root = require('./src/resolvers/root');
 
 // create express app
 const app = express();

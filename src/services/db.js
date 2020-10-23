@@ -15,7 +15,7 @@ class MysqlClient {
    * @param values Values array to fill up `?` placeholders in sql string.
    * @param options Node package mysql query options.
    * @param enableCamelCaseFieldMapper Enable result field name mapping,
-   * from kebab case to camel case.
+   *        from kebab case to camel case.
    * @param customFieldMapper Custom result field name mapper for field name mapping.
    * @returns {Promise<List>} List of returned rows, raw js objects.
    */
