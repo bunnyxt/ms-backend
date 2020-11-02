@@ -12,7 +12,6 @@ async function getVideos(filter = {}) {
   videoFilter.validate();
   const [template, values] = videoFilter.compile();
   const results = await db.query(`SELECT * FROM \`ms_video\` WHERE 1=1 ${template}`, [...values]);
-  return results ? results.map((video) => new Video(video)) : [];
   return results.map((video) => new Video(video));
 }
 }
