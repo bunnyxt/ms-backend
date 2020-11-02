@@ -39,6 +39,11 @@ class MysqlClient {
             return reject(queryErr);
           }
           
+          if (fields === undefined) {
+            // insert, update or delete done, resolve null indicating success
+            return resolve(null);
+          }
+          
           // RowDataPacket -> raw js object, map field name
           
           /**
@@ -86,7 +91,7 @@ class MysqlClient {
             }), {},
           ));
           
-          return resolve(returnResults); // maybe `resolve(returnResults || null)`?
+          return resolve(returnResults);
         });
       });
     });
