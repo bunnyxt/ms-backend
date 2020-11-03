@@ -21,7 +21,7 @@ async function addRecord(
     + '`src_type`, `src_author`, `src_url`, `remark`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [bvid, threshold, preciseValue, time, timespan, srcType, srcAuthor, srcUrl, remark],
   );
-  const result = db.query('SELECT * from `ms_record` WHERE `bvid` = ? and `threshold` = ?', [bvid, threshold]);
+  const result = await db.query('SELECT * from `ms_record` WHERE `bvid` = ? AND `threshold` = ?', [bvid, threshold]);
   return result.length > 0 ? new Record(result[0]) : null;
 }
 
