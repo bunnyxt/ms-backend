@@ -38,6 +38,17 @@ type Query {
   member(mid: Int!): Member
   members: [Member!]!
 }
+input VideoAddInput {
+  bvid: String!
+  titleAlias: String
+}
+input VideoUpdateInput {
+  titleAlias: String
+}
+type Mutation {
+  addVideo(input: VideoAddInput!): Video!
+  updateVideo(bvid: String!, input: VideoUpdateInput!): Video!
+}
 `);
 
 module.exports = schema;
