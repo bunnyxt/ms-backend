@@ -51,6 +51,15 @@ input RecordAddInput {
   srcUrl: String
   remark: String
 }
+input RecordUpdateInput {
+  threshold: Int
+  preciseValue: Int
+  time: Int
+  srcType: String
+  srcAuthor: String
+  srcUrl: String
+  remark: String
+}
 input VideoAddInput {
   bvid: String!
   titleAlias: String
@@ -60,6 +69,7 @@ input VideoUpdateInput {
 }
 type Mutation {
   addRecord(input: RecordAddInput!): Record!
+  updateRecord(id: Int!, input: RecordUpdateInput!): Record!
   addVideo(input: VideoAddInput!): Video!
   updateVideo(bvid: String!, input: VideoUpdateInput!): Video!
 }
