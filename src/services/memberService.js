@@ -11,7 +11,13 @@ async function getMembers() {
   return results.map((member) => new Member(member));
 }
 
+async function addMember(mid, name) {
+  await db.query('INSERT INTO `ms_member` (`mid`, `name`) VALUES (?, ?)', [mid, name]);
+  return getMemberByMid(mid);
+}
+
 module.exports = {
   getMemberByMid,
   getMembers,
+  addMember,
 };
