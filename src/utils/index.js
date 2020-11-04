@@ -17,7 +17,17 @@ function addPaddingZero(num, width) {
   return String(num).padStart(width, '0');
 }
 
+/**
+ * Check whether all item in array are undefined.
+ * @param array Array to be checked.
+ * @returns {boolean}
+ */
+function allUndefined(array) {
+  return array.filter((x) => x !== undefined).length === 0;
+}
+
 module.exports = {
   removeSecond,
   addPaddingZero,
+  allUndefined,
 };

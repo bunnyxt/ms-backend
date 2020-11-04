@@ -2,7 +2,7 @@ const biliAPI = require('bili-api');
 const videoService = require('../services/videoService');
 const memberService = require('../services/memberService');
 const recordService = require('../services/recordService');
-const { removeSecond } = require('../utils/index');
+const { removeSecond, allUndefined } = require('../utils/index');
 
 const root = {
   // Query
@@ -103,7 +103,7 @@ const root = {
   async updateVideo({ bvid, input }) {
     // params check
     const { titleAlias } = input;
-    if (titleAlias === undefined) {
+    if (allUndefined([titleAlias])) {
       throw Error('require at least one field to be updated');
     }
     
