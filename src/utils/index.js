@@ -7,6 +7,17 @@ function removeSecond(ts) {
   return (new Date(ts * 1000)).setSeconds(0) / 1000;
 }
 
+/**
+ * Add padding zero of a number.
+ * @param num Number to be added with padding zero.
+ * @param width Max with to be fulfilled.
+ * @returns {string} Number string with padding zero.
+ */
+function addPaddingZero(num, width) {
+  return String(num).padStart(width, '0');
+}
+
 module.exports = {
   removeSecond,
+  addPaddingZero,
 };
