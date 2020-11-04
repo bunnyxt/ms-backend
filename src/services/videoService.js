@@ -14,9 +14,23 @@ async function getVideos(filter = {}) {
   const results = await db.query(`SELECT * FROM \`ms_video\` WHERE 1=1 ${template}`, [...values]);
   return results.map((video) => new Video(video));
 }
+
+async function addVideo(bvid, titleAlias, pubdate, mid) {
+  await db.query(
+    'INSERT INTO `ms_video` (`bvid`, `title_alias`, `pubdate`, `mid`) VALUES (?, ?, ?, ?)',
+    [bvid, titleAlias, pubdate, mid],
+  );
+  return getVideoByBvid(bvid);
+}
+
+async function updateVideo(bvid, titleAlias) {
+  await db.query('UPDATE `ms_video` SET `title_alias` = ? WHERE `bvid` = ?', [titleAlias, bvid]);
+  return getVideoByBvid(bvid);
 }
 
 module.exports = {
   getVideoByBvid,
   getVideos,
+  addVideo,
+  updateVideo,
 };
