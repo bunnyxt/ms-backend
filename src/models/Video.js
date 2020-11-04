@@ -1,3 +1,4 @@
+const dateFormat = require('dateformat');
 const memberService = require('../services/memberService');
 const recordService = require('../services/recordService');
 
@@ -10,6 +11,10 @@ class Video {
     this.titleAlias = titleAlias;
     this.pubdate = pubdate;
     this.mid = mid;
+  }
+  
+  pubdateStr({ format = 'yyyy-mm-dd HH:MM' }) {
+    return dateFormat(new Date(this.pubdate * 1000), format);
   }
   
   owner() {

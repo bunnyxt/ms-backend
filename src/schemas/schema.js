@@ -6,6 +6,7 @@ type Video {
   bvid: String!
   titleAlias: String!
   pubdate: Int!
+  pubdateStr(format: String): String!
   mid: Int!
   owner: Member!
   records: [Record!]!
@@ -26,7 +27,9 @@ type Record {
   threshold: Int!
   preciseValue: Int!
   time: Int!
+  timeStr(format: String): String!
   timespan: Int!
+  timespanStr(yearFormat: Boolean, paddingZero: Boolean): String!
   srcType: String
   srcAuthor: String
   srcUrl: String
