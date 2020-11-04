@@ -25,7 +25,7 @@ class Record {
     const days = Math.floor(this.timespan / (24 * 60 * 60));
     const hours = Math.floor((this.timespan - days * (24 * 60 * 60)) / (60 * 60));
     const minutes = Math.floor((this.timespan - days * (24 * 60 * 60) - hours * (60 * 60)) / 60);
-    let prefixStr = `${days}日`;
+    let prefixStr = `${paddingZero ? addPaddingZero(days, 4) : days}日`;
     if (yearFormat) {
       // TODO consider lunar year?
       const years = Math.floor(days / 365);
