@@ -41,6 +41,16 @@ type Query {
   member(mid: Int!): Member
   members: [Member!]!
 }
+input RecordAddInput {
+  bvid: String!
+  threshold: Int!
+  preciseValue: Int!
+  time: Int!
+  srcType: String
+  srcAuthor: String
+  srcUrl: String
+  remark: String
+}
 input VideoAddInput {
   bvid: String!
   titleAlias: String
@@ -49,6 +59,7 @@ input VideoUpdateInput {
   titleAlias: String
 }
 type Mutation {
+  addRecord(input: RecordAddInput!): Record!
   addVideo(input: VideoAddInput!): Video!
   updateVideo(bvid: String!, input: VideoUpdateInput!): Video!
 }
