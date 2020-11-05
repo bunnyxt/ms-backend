@@ -1,5 +1,5 @@
 const dateFormat = require('dateformat');
-const { addPaddingZero } = require('../utils/index')
+const { addPaddingZero, countLunarYear } = require('../utils/index')
 
 class Record {
   constructor({
@@ -21,15 +21,23 @@ class Record {
     return dateFormat(new Date(this.time * 1000), format);
   }
   
-  timespanStr({ yearFormat = false, paddingZero = false }) {
+  timespanStr({ yearFormat = false, considerLunarYear = true, paddingZero = false }) {
     const days = Math.floor(this.timespan / (24 * 60 * 60));
     const hours = Math.floor((this.timespan - days * (24 * 60 * 60)) / (60 * 60));
     const minutes = Math.floor((this.timespan - days * (24 * 60 * 60) - hours * (60 * 60)) / 60);
     let prefixStr = `${paddingZero ? addPaddingZero(days, 4) : days}日`;
     if (yearFormat) {
-      // TODO consider lunar year?
-      const years = Math.floor(days / 365);
-      const daysLeft = days % 365;
+      let years = Math.floor(days / 365);
+      let daysLeft = days % 365;
+      if (considerLunarYear) {
+        // count lunar year, which actually count whole feb 29 days within the timespan
+        const lunarYearCount = countLunarYear(this.time - this.timespan, this.time);
+        daysLeft -= lunarYearCount;
+        if (daysLeft < 0) {
+          years -= 1;
+          daysLeft += 365;
+        }
+      }
       prefixStr = `${years}年${daysLeft}日`;
     }
     const suffixStr = `${

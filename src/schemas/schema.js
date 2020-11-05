@@ -29,7 +29,7 @@ type Record {
   time: Int!
   timeStr(format: String): String!
   timespan: Int!
-  timespanStr(yearFormat: Boolean, paddingZero: Boolean): String!
+  timespanStr(yearFormat: Boolean, considerLunarYear: Boolean, paddingZero: Boolean): String!
   srcType: String
   srcAuthor: String
   srcUrl: String
