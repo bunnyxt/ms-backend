@@ -1,179 +1,24 @@
 const biliAPI = require('bili-api');
-const videoService = require('../services/videoService');
-const memberService = require('../services/memberService');
-const recordService = require('../services/recordService');
-const { removeSecond, allUndefined } = require('../utils/index');
+const { video } = require('./queryResolvers/videoResolver');
+const { videos } = require('./queryResolvers/videosResolver');
+const { member } = require('./queryResolvers/memberResolver');
+const { members } = require('./queryResolvers/membersResolver');
+const { addRecord } = require('./mutationResolvers/addRecordResolver');
+const { updateRecord } = require('./mutationResolvers/updateRecordResolver');
+const { addVideo } = require('./mutationResolvers/addVideoResolver');
+const { updateVideo } = require('./mutationResolvers/updateVideoResolver');
 
 const rootResolver = {
   // Query
-  async video({ bvid }, context) {
-    console.log(context);
-    return videoService.getVideoByBvid(bvid);
-  },
-  async videos({ filter = {} }) {
-    return videoService.getVideos(filter);
-  },
-  async member({ mid }) {
-    return memberService.getMemberByMid(mid);
-  },
-  async members() {
-    return memberService.getMembers();
-  },
+  video,
+  videos,
+  member,
+  members,
   // Mutation
-  async addRecord({ input }) {
-    // params check
-    const {
-      threshold, preciseValue, srcType, srcAuthor, srcUrl, remark,
-    } = input;
-    
-    if (preciseValue < threshold) {
-      throw Error(`preciseValue (${preciseValue}) should not less than threshold (${threshold})`);
-    }
-    
-    let { time } = input;
-    time = removeSecond(time);
-    
-    const { bvid } = input;
-    const video = await videoService.getVideoByBvid(bvid);
-    if (!video) {
-      throw Error(`video BV${bvid} not added yet`);
-    }
-    
-    const records = await recordService.getRecordsByBvid(bvid);
-    if (records.find((record) => record.threshold === threshold)) {
-      throw Error(`video BV${bvid} already add record with threshold ${threshold}`);
-    }
-    
-    const timespan = time - removeSecond(video.pubdate);
-    if (timespan < 0) {
-      throw Error(`record time (${time}) should not before video pubdate (${removeSecond(video.pubdate)})`);
-    }
-    // params check done
-    
-    const record = await recordService.addRecord(
-      bvid, threshold, preciseValue, time, timespan, srcType, srcAuthor, srcUrl, remark,
-    );
-    if (record) {
-      // TODO add log
-    } else {
-      // TODO add log, maybe unreachable? what about error log above?
-    }
-    
-    return record;
-  },
-  async updateRecord({ id, input }) {
-    // params check
-    const {
-      threshold, preciseValue, srcType, srcAuthor, srcUrl, remark,
-    } = input;
-    
-    let { time } = input;
-    if (time) {
-      time = removeSecond(time);
-    }
-    
-    if (allUndefined([threshold, preciseValue, time, srcType, srcAuthor, srcUrl, remark])) {
-      throw Error('require at least one field to be updated');
-    }
-    
-    const record = await recordService.getRecordById(id);
-    if (!record) {
-      throw Error(`record id ${id} not exist`);
-    }
-    
-    const newThreshold = threshold || record.threshold;
-    const newPreciseValue = preciseValue || record.preciseValue;
-    if (newPreciseValue < newThreshold) {
-      throw Error(`preciseValue (${newPreciseValue}) should not less than threshold (${newThreshold})`);
-    }
-    
-    const { bvid } = record;
-    const video = await videoService.getVideoByBvid(bvid);
-    if (!video) {
-      throw Error(`video BV${bvid} not added yet`);
-    }
-    
-    const newTime = time || record.time;
-    const newTimespan = newTime - removeSecond(video.pubdate);
-    if (newTimespan < 0) {
-      throw Error(`record time (${newTime}) should not before video pubdate (${removeSecond(video.pubdate)})`);
-    }
-    // params check done
-    
-    const updatedRecord = await recordService.updateRecord(
-      id, threshold, preciseValue, time, newTimespan, srcType, srcAuthor, srcUrl, remark,
-    );
-    if (updatedRecord) {
-      // TODO add log
-    } else {
-      // TODO add log, maybe unreachable? what about error log above?
-    }
-    
-    return updatedRecord;
-  },
-  async addVideo({ input }) {
-    // params check
-    const { bvid } = input;
-    const video = await videoService.getVideoByBvid(bvid);
-    if (video) {
-      throw Error(`video BV${bvid} already added yet`);
-    }
-    
-    const { titleAlias } = input;
-    // params check done
-    
-    // fetch video, add video and member if need
-    const videoFromApi = await biliAPI({ bvid }, ['view']);
-    if (!videoFromApi) {
-      throw Error(`cannot fetch video BV${bvid} from bilibili api`);
-    }
-    const { title, pubdate, owner: { mid, name } } = videoFromApi.view.data;
-    
-    const member = await memberService.getMemberByMid(mid);
-    if (!member) {
-      if (typeof mid !== 'number') {
-        throw Error(`invalid mid ${mid}`);
-      }
-      if (typeof name !== 'string') {
-        throw Error(`invalid name ${name}`);
-      }
-      // add member
-      await memberService.addMember(mid, name);
-    }
-    
-    // add video
-    const addedVideo = await videoService.addVideo(bvid, titleAlias || title, pubdate, mid);
-    if (addedVideo) {
-      // TODO add log
-    } else {
-      // TODO add log, maybe unreachable? what about error log above?
-    }
-    
-    return addedVideo;
-  },
-  async updateVideo({ bvid, input }) {
-    // params check
-    const { titleAlias } = input;
-    if (allUndefined([titleAlias])) {
-      throw Error('require at least one field to be updated');
-    }
-    
-    const video = await videoService.getVideoByBvid(bvid);
-    if (!video) {
-      throw Error(`video BV${bvid} not added yet`);
-    }
-    // params check done
-    
-    // update video
-    const updatedVideo = await videoService.updateVideo(bvid, titleAlias);
-    if (updatedVideo) {
-      // TODO add log
-    } else {
-      // TODO add log, maybe unreachable? what about error log above?
-    }
-    
-    return updatedVideo;
-  },
+  addRecord,
+  updateRecord,
+  addVideo,
+  updateVideo,
 };
 
 module.exports = rootResolver;
