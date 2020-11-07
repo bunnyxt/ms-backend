@@ -8,7 +8,7 @@ const { graphqlHTTP } = require('express-graphql');
 
 // root ans schema
 const schema = require('./src/schemas/schema');
-const root = require('./src/resolvers/root');
+const rootResolver = require('./src/resolvers/rootResolver');
 
 // create express app
 const app = express();
@@ -19,7 +19,7 @@ app.use(cors());
 // graphql
 app.use('/graphql', graphqlHTTP({
   schema,
-  rootValue: root,
+  rootValue: rootResolver,
   graphiql: true,
 }));
 

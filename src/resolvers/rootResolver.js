@@ -4,9 +4,10 @@ const memberService = require('../services/memberService');
 const recordService = require('../services/recordService');
 const { removeSecond, allUndefined } = require('../utils/index');
 
-const root = {
+const rootResolver = {
   // Query
-  async video({ bvid }) {
+  async video({ bvid }, context) {
+    console.log(context);
     return videoService.getVideoByBvid(bvid);
   },
   async videos({ filter = {} }) {
@@ -175,4 +176,4 @@ const root = {
   },
 };
 
-module.exports = root;
+module.exports = rootResolver;
