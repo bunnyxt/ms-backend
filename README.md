@@ -11,10 +11,16 @@ CAUTION: This program is related to VOCALOID CHINA, so the most of the documenta
 Backend program of VOCALOID CHINA (VC) milestone (ms in short) project, using Express + GraphQL + MySQL.
 </div>
 
+## Introduction
+
+VC Milestone Project is part of TianDian Daily Project. We are devoted to provide an open platform for recording the time when view count of BiliBili VC-related videos have reached special numbers (100K, 1M, 10M, etc.). Anyone can add, modify, and query video view records on this platform.
+
+Until the update of this document (November 8, 2020), this project is still in the early stages of development. Platform requirements, interaction logic, interface design, and database design have not been finalized. Major changes may occur. Please follow this project on GitHub, or join the QQ group [537793686](https://jq.qq.com/?_wv=1027&k=588s7nw) to contact us. Feel free to contact us for discussions and suggestions!
+
 ## Environment
 
-- `NodeJS v12.18.2`
-- `MySQL v5.7.30`
+- `NodeJS` `v12.18.2`
+- `MySQL` `v5.7.30`
 
 ## Getting Started
 
